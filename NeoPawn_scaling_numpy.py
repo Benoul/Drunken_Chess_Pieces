@@ -58,6 +58,7 @@ def time_finder(N, M, max_steps=1000):
     for step in range(num_steps):
         #how often it gets trapped...
         num_traps = 0
+        failure_to_finish = False
         next_pos, move_was_jump, trap_status = get_next_move(current_pos, simulation_lattice, N, possible_moves)
         if trap_status:
             # if the walker gets trapped then we will return it to the previous position and continue
@@ -70,12 +71,9 @@ def time_finder(N, M, max_steps=1000):
             simulation_lattice[next_pos] = 0
             m_counter -= 1
         if m_counter == 0:
-            return step + num_traps
+            return step + num_traps, failure_to_finish
             break
     
     if m_counter > 0:
-        print('The walker has not yet eaten all of the pieces')
-        return num_steps
-    
-
-print(time_finder(10, 10))
+        failure_to_finish = True
+        return num_steps, failure_to_finish
